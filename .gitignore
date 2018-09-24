@@ -1,3 +1,12 @@
+# mac .DS_Store file
+.DS_Store
+
+# MS VS code file
+.code/
+
+# emacs temp file
+*~
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
