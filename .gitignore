@@ -1,3 +1,6 @@
+# tensorflow logs
+logs/
+
 # mac .DS_Store file
 .DS_Store
 
