@@ -25,16 +25,16 @@ class InceptionV3():
                 # first convolution
                 logging.debug(input.get_shape().as_list())
                 logging.debug(input.get_shape().ndims)
-                conv_1 = conv2d(input, 7, 64, 2, 'conv_1')
+                conv_1 = conv2d(input, 7, 64, 1, 'conv_1')
                 output = tf.layers.max_pooling2d(
-                    conv_1, 3, 2, 'same', name='max_pooling_1'
+                    conv_1, 3, 1, 'same', name='max_pooling_1'
                 )
 
                 # second convolution
                 reduce_1x1 = conv2d(output, 3, 64, name='reduce_1')
                 output = conv2d(reduce_1x1, 3, 192, name='conv_2')
                 output = tf.layers.max_pooling2d(
-                    output, 3, 2, 'same', name='max_pooling_2'
+                    output, 3, 1, 'same', name='max_pooling_2'
                 )
 
             with tf.name_scope('inception_block_1'):
@@ -58,12 +58,12 @@ class InceptionV3():
                 output = inception_module(
                     output, 160, 112, 224, 24, 64, 64, name='inception_4b'
                 )
-                output = inception_module(
-                    output, 128, 128, 256, 24, 64, 64, name='inception_4c'
-                )
-                output = inception_module(
-                    output, 112, 144, 288, 32, 64, 64, name='inception_4d'
-                )
+                # output = inception_module(
+                #     output, 128, 128, 256, 24, 64, 64, name='inception_4c'
+                # )
+                # output = inception_module(
+                #     output, 112, 144, 288, 32, 64, 64, name='inception_4d'
+                # )
                 output = inception_module(
                     output, 256, 160, 320, 32, 128, 128, name='inception_4e'
                 )
@@ -76,9 +76,9 @@ class InceptionV3():
                 output = inception_module(
                     output, 256, 160, 320, 32, 128, 128, name='inception_5a'
                 )
-                output = inception_module(
-                    output, 384, 192, 384, 48, 128, 128, name='inception_5b'
-                )
+                # output = inception_module(
+                #     output, 384, 192, 384, 48, 128, 128, name='inception_5b'
+                # )
 
             output = tf.layers.average_pooling2d(
                 output, 7, 1, 'same', name='avg_pooling'
@@ -131,11 +131,11 @@ class InceptionV3():
         tf.summary.histogram('output', model_output)
         tf.summary.scalar('loss', loss)
 
-        start_lr = 0.001
+        start_lr = 0.01
         lr = tf.train.exponential_decay(
             start_lr, global_step, decay_steps=epochs, decay_rate=0.5
         )
-        tf.summary.scalar('learning rate', lr)
+        tf.summary.scalar('learning_rate', lr)
 
         train_op = tf.train.AdamOptimizer(learning_rate=lr).minimize(
             loss, global_step=global_step
